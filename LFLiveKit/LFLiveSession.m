@@ -121,6 +121,25 @@
     }
 }
 
+//saolatv
+- (void)pushAudioBuffer:(CMSampleBufferRef)sampleBuffer {
+    
+    CMBlockBufferRef blockBuffer = CMSampleBufferGetDataBuffer(sampleBuffer);
+    size_t lengthAtOffset;
+    size_t totalLength;
+    char *data;
+    CMBlockBufferGetDataPointer(blockBuffer, 0, &lengthAtOffset, &totalLength, &data);
+
+    NSData *audioData = [NSData dataWithBytes:data length:totalLength];
+    
+    [self pushAudio:audioData];
+}
+
+- (void)pushVideoBuffer:(CMSampleBufferRef)sampleBuffer {
+    CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    [self pushVideo:pixelBuffer];
+}
+
 #pragma mark -- PrivateMethod
 - (void)pushSendBuffer:(LFFrame*)frame{
     if(self.relativeTimestamps == 0){
